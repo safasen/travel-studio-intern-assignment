@@ -2,6 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { pendingRequests } from "@/lib/api/requestsApi";
 
+
 export default function DashboardPage() {
     /**
      * DashboardPage component that fetches and displays pending requests.
@@ -12,6 +13,14 @@ export default function DashboardPage() {
      * @throws {Error} If the fetch request fails or the response is not ok.
      * 
      */
+
+    type pendingRequest = {
+        id: number;
+        guestPhone: string;
+        requestText: string;
+        createdAt: Date;
+        status: string
+    }
     const { data, isLoading, error } = useQuery({
         queryKey: ["pendingRequests"],
         queryFn: pendingRequests,
@@ -37,7 +46,7 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody>
-              {data?.map((item: any, index: number) => (
+              {(data as pendingRequest[]).map((item: pendingRequest, index: number) => (
                 <tr key={item.id ?? index} className="border-t hover:bg-blue-50">
                   <td className="px-4 py-3 text-blue-800">{item.guestPhone}</td>
                   <td className="px-4 py-3 text-blue-800">{item.requestText}</td>
