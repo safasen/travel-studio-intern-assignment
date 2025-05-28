@@ -1,0 +1,23 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+// Represents a request made by a user or system.
+// Contains details about the request made through n8n workflow such as guestPhone, status, timestamps, and associated text.
+
+model Requests {
+  id Int @id @default(autoincrement())
+  guestPhone String
+  requestText String
+  createdAt DateTime @default(now())
+  status String @default("pending")
+}
