@@ -1,0 +1,193 @@
+{
+  "name": "request-workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "665675126630819",
+        "recipientPhoneNumber": "+919599253472",
+        "textBody": "=Request Recieved! Our staff will assist you soon.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        780,
+        0
+      ],
+      "id": "695bd8dc-f16f-4d2b-84b0-2d98696e59fc",
+      "name": "WhatsApp Business Cloud",
+      "webhookId": "920b27be-0fc4-4675-b268-f07ef1fac49d",
+      "executeOnce": true,
+      "retryOnFail": false,
+      "credentials": {
+        "whatsAppApi": {
+          "id": "1GarvZ1ieMkc8Pd0",
+          "name": "WhatsApp account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        -60
+      ],
+      "id": "30aa70d8-d10a-4d51-8e1d-7e174b578d61",
+      "name": "messages",
+      "webhookId": "21633325-6467-408b-b8d2-f9d759d103c4",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "wLyK3jmBht0MLvuM",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"phone\": \"{{ $json[\"messages\"][0][\"from\"] }}\",\n  \"text\": \"{{ $json[\"messages\"][0][\"text\"][\"body\"] }}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        40
+      ],
+      "id": "6e36169b-dc12-4e4b-bed8-1e07b38d7799",
+      "name": "Edit Fields",
+      "executeOnce": true,
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://334f-2401-4900-1f37-aaab-5c20-ca9f-f7c7-50f1.ngrok-free.app/api/requests ",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"guestPhone\" : \"{{ $json[\"phone\"] }}\",\n  \"requestText\" : \"{{ $json[\"text\"]}}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        40
+      ],
+      "id": "b527bdd7-2e4b-45b7-ba3c-56ae4860ace3",
+      "name": "HTTP Request",
+      "executeOnce": true,
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "89fbf4aa-6f1e-4cac-9fac-883948d1a310",
+              "leftValue": "={{ $json[\"messages\"][0][\"text\"][\"body\"] }}",
+              "rightValue": "Request Recieved",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "4d464a1b-d86d-416c-b95a-fb2d1597fb06",
+              "leftValue": "={{ $json[\"messages\"][0][\"text\"][\"body\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        100,
+        -60
+      ],
+      "id": "ef7cded0-c10a-4720-8f69-5bd3c35fde04",
+      "name": "If"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "messages": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "40f080c5-9fc2-4437-be80-48b59be135d2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "feabe39e9f465988f372d5d8f6c464fab319e69308764b6bec80332bfc6eb4dd"
+  },
+  "id": "zrds0DqZnK7fZSLv",
+  "tags": []
+}
