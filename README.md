@@ -1,4 +1,4 @@
-# Full Stack Project: NestJS + Next.js + PostgreSQL + Prisma + n8n
+# Guest Request Logging Workflow: NestJS + Next.js + PostgreSQL + Prisma + n8n
 
 This is a full-stack web application built with:
 
