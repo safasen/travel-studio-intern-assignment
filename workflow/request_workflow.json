@@ -70,7 +70,10 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://334f-2401-4900-1f37-aaab-5c20-ca9f-f7c7-50f1.ngrok-free.app/api/requests ",
+        "url": "https://tight-accurate-oyster.ngrok-free.app/api/requests ",
+        "sendHeaders": true,
+        "specifyHeaders": "json",
+        "jsonHeaders": "{\n  \"api-key\" : \"somethingsecret\"\n}",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={\n  \"guestPhone\" : \"{{ $json[\"phone\"] }}\",\n  \"requestText\" : \"{{ $json[\"text\"]}}\"\n}",
@@ -183,7 +186,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "40f080c5-9fc2-4437-be80-48b59be135d2",
+  "versionId": "0c943903-80bd-44a2-b5f6-c203c5837705",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "feabe39e9f465988f372d5d8f6c464fab319e69308764b6bec80332bfc6eb4dd"
