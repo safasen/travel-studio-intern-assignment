@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, Headers, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('requests')
@@ -21,9 +21,14 @@ export class RequestsController {
      */
 
     @Post('')
-    async handleRequest(@Body() body: any) {
+    async handleRequest(@Headers('api-key') apikey: string,  @Body() body: any) {
         try {   
-
+            // Validate the API key
+            if (apikey !== process.env.API_KEY) {
+                throw new HttpException("Invalid API key", HttpStatus.UNAUTHORIZED);
+            }
+            
+            // Validate the request body
             const { guestPhone, requestText} = body;
             if (!guestPhone || !requestText) {
                 throw new HttpException("Missing required fields: guestPhone and requestText", HttpStatus.BAD_REQUEST);
